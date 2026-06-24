@@ -1,0 +1,81 @@
+---
+import Layout from "@/layouts/Layout.astro"
+
+import Briefcase from "@/components/icons/Briefcase.astro"
+import CodeIcon from "@/components/icons/Code.astro"
+import EducationIcon from "@/components/icons/Education.astro"
+import Experience from "@/components/Experience.astro"
+import Education from "@/components/Education.astro"
+import MailIcon from "@/components/icons/Mail.astro"
+import ProfileCheck from "@/components/icons/ProfileCheck.astro"
+import SystemIcon from "@/components/icons/System.astro"
+import Contact from "@/components/Contact.astro"
+import Frameworks from "@/components/Frameworks.astro"
+import Projects from "@/components/Projects.astro"
+import Skills from "@/components/Skills.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+import Hero from "@/components/Hero.astro"
+import TitleSection from "@/components/TitleSection.astro"
+---
+
+<Layout
+  title="Portafolio de Jose Leyva"
+  description="Portfolio de Jose Leyva, Junior Software Engineer especializado en desarrollo web y soluciones de inventario y gestión."
+>
+  <main class="px-4">
+    <SectionContainer id="home" class="py-16 md:py-36">
+      <Hero>
+      </slot>
+    </Hero>
+    </SectionContainer>
+    <div class="space-y-24">
+    <SectionContainer id="experiencia">
+      <TitleSection>
+        <Briefcase class="size-8" />
+        Work Experience
+      </TitleSection>
+      <Experience />
+    </SectionContainer>
+
+    <SectionContainer id="educacion">
+      <TitleSection>
+        <EducationIcon class="size-8" />
+        Education
+      </TitleSection>
+      <Education />
+    </SectionContainer>
+
+    <SectionContainer id="proyectos">
+      <TitleSection>
+        <CodeIcon class="size-7" />
+        Projects
+      </TitleSection>
+      <Projects />
+    </SectionContainer>
+
+    <SectionContainer id="skills">
+      <TitleSection>
+        <ProfileCheck class="size-8" />
+        Skills
+      </TitleSection>
+      <Skills />
+    </SectionContainer>
+
+    <SectionContainer id="frameworks">
+      <TitleSection>
+        <SystemIcon class="size-8" />
+        Frameworks
+      </TitleSection>
+      <Frameworks />
+    </SectionContainer>
+
+    <SectionContainer id="contacto">
+      <TitleSection>
+        <MailIcon class="size-8" />
+        Contact Me
+      </TitleSection>
+      <Contact />
+    </SectionContainer>
+  </div>
+  </main>
+</Layout>

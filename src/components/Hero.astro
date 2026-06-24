@@ -1,0 +1,50 @@
+---
+const personalImageAlt = "José Leyva"
+import LinkedInIcon from "@/components/icons/LinkedIn.astro"
+import MailIcon from "@/components/icons/Mail.astro"
+import GitHubIcon from "@/components/icons/GitHub.astro"
+import DownloadIcon from "@/components/icons/Download.astro"
+import SocialPill from "@/components/SocialPill.astro"
+---
+
+<div class="flex flex-col items-center gap-8 md:flex-row md:items-start">
+  <div class="flex-1 max-w-xl">
+    <h1
+      class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
+    >
+      Hello there, I'm Jose Leyva!
+    </h1>
+    <p
+      class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-200 [&>strong]:font-semibold dark:text-gray-300"
+    >
+      I'm a <strong>Junior Software Engineer</strong> with hands-on experience
+      developing web applications focused on solving real business
+      needs, primarily by creating inventory and management solutions.
+    </p>
+    <nav class="flex flex-wrap gap-4 mt-8">
+      <SocialPill href="mailto:Jmleyvamunguia@gmail.com">
+        <MailIcon class="size-4" />
+        Contact me
+      </SocialPill>
+      <SocialPill href="https://www.linkedin.com/in/josé-manuel-leyva-munguía">
+        <LinkedInIcon class="size-4" />
+        LinkedIn
+      </SocialPill>
+      <SocialPill href="https://github.com/JossMunguia03">
+        <GitHubIcon class="size-4" />
+        GitHub
+      </SocialPill>
+      <SocialPill href="/CV JOSE LEYVA.pdf" download="CV Jose Leyva.pdf">
+        <DownloadIcon class="size-4" />
+        Download CV
+      </SocialPill>
+    </nav>
+  </div>
+  <div class="flex-shrink-0">
+    <img
+      class="rounded-2xl shadow-lg object-cover w-64 h-64 md:w-80 md:h-80"
+      src="/JoseLeyva.jpg"
+      alt={personalImageAlt}
+    />
+  </div>
+</div>

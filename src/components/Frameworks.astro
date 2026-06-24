@@ -1,0 +1,129 @@
+---
+const FRAMEWORKS = [
+  { name: "Express.js", icon: "/Frameworks/ExpressJS.png" },
+  { name: "Bootstrap", icon: "/Frameworks/Bootstrap.svg" },
+  { name: "Astro", icon: "/Frameworks/Astro.svg" },
+  { name: "React", icon: "/Frameworks/React.svg" },
+]
+---
+
+<div class="frameworks-grid">
+  {
+    FRAMEWORKS.map((framework, index) => (
+      <div
+        class="framework-card"
+        style={`--float-delay: ${index * 0.4}s`}
+      >
+        <div class="framework-icon-wrap">
+          <img
+            src={framework.icon}
+            alt={framework.name}
+            width="56"
+            height="56"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <span class="framework-label">{framework.name}</span>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .frameworks-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .frameworks-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .framework-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    animation: framework-float 4.5s ease-in-out infinite;
+    animation-delay: var(--float-delay, 0s);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  :global(.dark) .framework-card {
+    background: rgba(39, 39, 42, 0.55);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  }
+
+  .framework-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(233, 131, 0, 0.15);
+  }
+
+  .framework-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+
+  :global(.dark) .framework-icon-wrap {
+    background: #27272a;
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .framework-icon-wrap img {
+    width: 58%;
+    height: 58%;
+    object-fit: contain;
+  }
+
+  .framework-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: center;
+    color: rgba(17, 17, 17, 0.85);
+  }
+
+  :global(.dark) .framework-label {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  @keyframes framework-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  .framework-card:hover {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .framework-card {
+      animation: none;
+    }
+  }
+</style>

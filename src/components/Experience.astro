@@ -1,0 +1,26 @@
+---
+import ExperienceItem from "./ExperienceItem.astro"
+const EXPERIENCE = [
+  {
+    title: "Junior Software Developer",
+    titleColor: "#E98300",
+    company: "TE Connectivity · Internship Contract",
+    date: "Jul. 2025 – Dec. 2025 · 6 months",
+    location: "Empalme · On-site",
+    description: [
+      "Junior Full Stack Developer focused on creating internal web applications for IT, Quality, and Occupational Safety departments. Experienced in process automation, inventory management, and operational control through custom-built solutions.",
+      "Developed internal systems that replaced manual processes, optimizing workflows, improving asset traceability, and reducing operational errors through the centralization and immediate availability of information.",
+    ],
+  },
+]
+---
+
+<ol class="relative mt-16">
+  {
+    EXPERIENCE.map((experience) => (
+      <li class="">
+        <ExperienceItem {...experience} />
+      </li>
+    ))
+  }
+</ol>

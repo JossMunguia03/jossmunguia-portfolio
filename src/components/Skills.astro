@@ -1,0 +1,368 @@
+---
+const SKILLS = [
+  { name: "Node.js", icon: "/Skills/NodeJS.svg" },
+  { name: "SQL", icon: "/Skills/sql.svg" },
+  { name: "Git & GitHub", icon: "/Skills/Git&GitHub.png" },
+  { name: "Python", icon: "/Skills/Python.png" },
+  { name: "HTML", icon: "/Skills/HTML.png" },
+  { name: "Java", icon: "/Skills/Java.png" },
+  { name: "PHP", icon: "/Skills/PHP.png" },
+  { name: "CSS", icon: "/Skills/CSS.png" },
+  { name: "JavaScript", icon: "/Skills/JavaScript.png" },
+  { name: "Excel & VBA", icon: "/Skills/ExcelVBA.png" },
+]
+
+const DEFAULT_ACTIVE = SKILLS.findIndex((s) => s.name === "HTML")
+---
+
+<div
+  class="skills-carousel"
+  data-default-active={DEFAULT_ACTIVE}
+  tabindex="0"
+>
+  <button
+    type="button"
+    class="skills-nav skills-nav--prev"
+    aria-label="Previous skill"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M15 18l-6-6 6-6"></path>
+    </svg>
+  </button>
+
+  <div class="skills-stage" role="region" aria-label="Skills carousel">
+    {
+      SKILLS.map((skill, index) => (
+        <div
+          class="skill-orbit"
+          data-index={index}
+          style={`--float-delay: ${index * 0.35}s`}
+        >
+          <div class="skill-icon-wrap">
+            <img
+              src={skill.icon}
+              alt={skill.name}
+              width="64"
+              height="64"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <span class="skill-label">{skill.name}</span>
+        </div>
+      ))
+    }
+  </div>
+
+  <button
+    type="button"
+    class="skills-nav skills-nav--next"
+    aria-label="Next skill"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M9 18l6-6-6-6"></path>
+    </svg>
+  </button>
+</div>
+
+<script>
+  // @ts-nocheck
+  const initSkillsCarousel = () => {
+    const carousel = document.querySelector(".skills-carousel")
+    if (!carousel || carousel.dataset.initialized === "true") return
+    carousel.dataset.initialized = "true"
+
+    const items = carousel.querySelectorAll(".skill-orbit")
+    const prevBtn = carousel.querySelector(".skills-nav--prev")
+    const nextBtn = carousel.querySelector(".skills-nav--next")
+    const total = items.length
+    let activeIndex = Number(carousel.dataset.defaultActive) || 0
+
+    const getOffset = (index) => {
+      let offset = index - activeIndex
+      if (offset > total / 2) offset -= total
+      if (offset < -total / 2) offset += total
+      return offset
+    }
+
+    const getLayout = (offset) => {
+      const stage = carousel.querySelector(".skills-stage")
+      const radiusX = stage
+        ? Math.min(stage.clientWidth * 0.38, 340)
+        : 300
+      const radiusY = radiusX * 0.38
+      const angleDeg = offset * 36
+      const rad = (angleDeg * Math.PI) / 180
+      const x = Math.sin(rad) * radiusX
+      // Arc opens upward: active skill sits at the bottom center (y = 0)
+      const y = (Math.cos(rad) - 1) * radiusY
+      const scale =
+        offset === 0 ? 1.35 : Math.max(0.58, 1 - Math.abs(offset) * 0.13)
+      const opacity =
+        offset === 0 ? 1 : Math.max(0.45, 0.95 - Math.abs(offset) * 0.12)
+      const zIndex = 10 - Math.abs(offset)
+
+      return { x, y, scale, opacity, zIndex, isActive: offset === 0 }
+    }
+
+    const updatePositions = () => {
+      items.forEach((item, index) => {
+        const offset = getOffset(index)
+        const { x, y, scale, opacity, zIndex, isActive } = getLayout(offset)
+
+        item.style.setProperty("--x", `${x}px`)
+        item.style.setProperty("--y", `${y}px`)
+        item.style.setProperty("--scale", String(scale))
+        item.style.opacity = String(opacity)
+        item.style.zIndex = String(zIndex)
+        item.dataset.active = isActive ? "true" : "false"
+
+      })
+
+      const activeItem = items[activeIndex]
+      const activeName =
+        activeItem?.querySelector(".skill-label")?.textContent ?? "Skill"
+      carousel
+        .querySelector(".skills-stage")
+        ?.setAttribute("aria-label", `Skills carousel, ${activeName} selected`)
+    }
+
+    const goTo = (direction) => {
+      activeIndex = (activeIndex + direction + total) % total
+      updatePositions()
+    }
+
+    prevBtn?.addEventListener("click", () => goTo(-1))
+    nextBtn?.addEventListener("click", () => goTo(1))
+
+    carousel.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") goTo(-1)
+      if (e.key === "ArrowRight") goTo(1)
+    })
+
+    window.addEventListener("resize", updatePositions)
+    updatePositions()
+  }
+
+  initSkillsCarousel()
+  document.addEventListener("astro:page-load", initSkillsCarousel)
+</script>
+
+<style>
+  .skills-carousel {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 1rem;
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
+  }
+
+  .skills-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 3rem;
+    height: 3rem;
+    color: #111;
+    background: transparent;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition:
+      color 0.2s,
+      transform 0.2s,
+      background-color 0.2s;
+  }
+
+  .skills-nav:hover {
+    color: #e98300;
+    background-color: rgba(233, 131, 0, 0.1);
+    transform: scale(1.08);
+  }
+
+  .skills-nav:active {
+    transform: scale(0.95);
+  }
+
+  :global(.dark) .skills-nav {
+    color: #f4f4f5;
+  }
+
+  :global(.dark) .skills-nav:hover {
+    color: #e98300;
+    background-color: rgba(233, 131, 0, 0.15);
+  }
+
+  .skills-stage {
+    position: relative;
+    width: 100%;
+    height: clamp(280px, 42vw, 380px);
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  .skill-orbit {
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 5.5rem;
+    margin-left: -2.75rem;
+    transform: translate(
+        calc(-50% + var(--x, 0px)),
+        calc(-50% + var(--y, 0px))
+      )
+      scale(var(--scale, 1));
+    transition:
+      transform 0.55s cubic-bezier(0.34, 1.2, 0.64, 1),
+      opacity 0.45s ease;
+    pointer-events: none;
+  }
+
+  .skill-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(3.5rem, 8vw, 5.5rem);
+    height: clamp(3.5rem, 8vw, 5.5rem);
+    border-radius: 9999px;
+    background: #fff;
+    box-shadow:
+      0 4px 20px rgba(0, 0, 0, 0.08),
+      0 0 0 1px rgba(0, 0, 0, 0.06);
+    animation: skill-float 4s ease-in-out infinite;
+    animation-delay: var(--float-delay, 0s);
+  }
+
+  :global(.dark) .skill-icon-wrap {
+    background: #27272a;
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.35),
+      0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .skill-orbit[data-active="true"] .skill-icon-wrap {
+    box-shadow:
+      0 8px 32px rgba(233, 131, 0, 0.25),
+      0 0 0 2px rgba(233, 131, 0, 0.35);
+  }
+
+  .skill-icon-wrap img {
+    width: 58%;
+    height: 58%;
+    object-fit: contain;
+  }
+
+  .skill-orbit[data-active="true"] .skill-icon-wrap img {
+    width: 62%;
+    height: 62%;
+  }
+
+  .skill-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+    color: rgba(17, 17, 17, 0.55);
+    white-space: nowrap;
+    transition:
+      color 0.35s ease,
+      font-size 0.35s ease,
+      opacity 0.35s ease;
+  }
+
+  :global(.dark) .skill-label {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .skill-orbit[data-active="true"] .skill-label {
+    color: rgba(17, 17, 17, 0.95);
+    font-size: 0.95rem;
+  }
+
+  :global(.dark) .skill-orbit[data-active="true"] .skill-label {
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  @keyframes skill-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .skills-carousel {
+      gap: 0;
+    }
+
+    .skills-nav {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+
+    .skills-nav svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .skill-orbit {
+      width: 4rem;
+      margin-left: -2rem;
+    }
+
+    .skill-label {
+      font-size: 0.7rem;
+      white-space: normal;
+      max-width: 4.5rem;
+    }
+
+    .skill-orbit[data-active="true"] .skill-label {
+      font-size: 0.8rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skill-icon-wrap {
+      animation: none;
+    }
+
+    .skill-orbit {
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+  }
+</style>

@@ -1,0 +1,85 @@
+---
+import LinkInline from "./LinkInline.astro"
+
+interface Props {
+  title: string
+  company: string
+  description?: string | string[]
+  link?: string
+  date: string
+  location?: string
+  titleColor?: string
+}
+
+const { title, company, description, link, date, location, titleColor } =
+  Astro.props
+
+const titleStyle = titleColor ? { color: titleColor } : undefined
+const titleClass = titleColor ? undefined : "text-yellow-400"
+const descriptions = Array.isArray(description)
+  ? description.filter(Boolean)
+  : description
+    ? [description]
+    : []
+const hasDescription = descriptions.length > 0
+---
+
+<div
+  class:list={[
+    "relative mx-12 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[''] md:gap-10 md:space-x-4",
+    hasDescription ? "md:grid-cols-5" : "md:grid-cols-1",
+  ]}
+>
+  <div class:list={["relative pb-12", hasDescription ? "md:col-span-2" : ""]}>
+    <div class="sticky top-0">
+      <span
+        class:list={["-left-[42px] absolute rounded-full text-5xl", titleClass]}
+        style={titleStyle}>&bull;</span
+      >
+
+      <h3 class:list={["text-xl font-bold", titleClass]} style={titleStyle}
+        >{title}</h3
+      >
+      <h4 class="font-semibold text-xl text-gray-600 dark:text-white">{company}</h4>
+      <time class="p-0 m-0 text-sm text-gray-600/80 dark:text-white/80">{date}</time>
+      {
+        location && (
+          <p class="p-0 m-0 mt-1 text-sm text-gray-600/80 dark:text-white/80">
+            {location}
+          </p>
+        )
+      }
+    </div>
+  </div>
+  {
+    hasDescription && (
+      <div class="relative flex flex-col gap-2 pb-4 text-gray-600 dark:text-gray-300 md:col-span-3">
+        {descriptions.map((paragraph) => <p>{paragraph}</p>)}
+        {
+          link && (
+            <LinkInline href={link}>
+              Saber más{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 icon icon-tabler icon-tabler-chevron-right"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <>
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M9 6l6 6l-6 6" />
+                </>
+              </svg>
+            </LinkInline>
+          )
+        }
+      </div>
+    )
+  }
+</div>

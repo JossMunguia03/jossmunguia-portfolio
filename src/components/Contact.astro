@@ -1,0 +1,139 @@
+---
+const contactEmail = "Jmleyvamunguia@gmail.com"
+const redirectUrl = new URL("/#contacto?sent=1", Astro.url.origin).href
+---
+
+<div class="flex flex-col items-center text-center">
+  <p class="max-w-2xl text-2xl font-semibold leading-snug text-gray-800 sm:text-3xl md:text-4xl dark:text-gray-100">
+    Do you have a challenge for me? Would you like to bring an idea to life?
+  </p>
+  <p class="mt-4 text-base text-gray-600 sm:text-lg dark:text-gray-400">
+    Feel free to send me a message!
+  </p>
+
+  <a
+    href={`mailto:${contactEmail}`}
+    class="mt-4 inline-flex items-center gap-2 text-base text-gray-700 transition hover:text-blue-500 sm:text-lg dark:text-gray-300 dark:hover:text-blue-400"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="size-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path>
+      <path d="M3 7l9 6l9 -6"></path>
+    </svg>
+    E-mail: {contactEmail}
+  </a>
+
+  <div
+    id="contact-success"
+    class="hidden mt-8 w-full max-w-xl rounded-xl border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-700 dark:text-green-300"
+    role="status"
+  >
+    Your message was sent successfully. I'll get back to you soon!
+  </div>
+
+  <form
+    action={`https://formsubmit.co/${contactEmail}`}
+    method="POST"
+    class="mt-10 w-full max-w-xl space-y-5 text-left"
+  >
+    <input type="hidden" name="_subject" value="New message from portfolio contact form" />
+    <input type="hidden" name="_template" value="table" />
+    <input type="hidden" name="_captcha" value="false" />
+    <input type="hidden" name="_next" value={redirectUrl} />
+    <input type="text" name="_honey" class="hidden" tabindex="-1" autocomplete="off" />
+
+    <div>
+      <label for="contact-name" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        Your name
+      </label>
+      <input
+        id="contact-name"
+        type="text"
+        name="name"
+        required
+        autocomplete="name"
+        class="contact-field"
+        placeholder="John Doe"
+      />
+    </div>
+
+    <div>
+      <label for="contact-email" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        Your email
+      </label>
+      <input
+        id="contact-email"
+        type="email"
+        name="email"
+        required
+        autocomplete="email"
+        class="contact-field"
+        placeholder="you@example.com"
+      />
+    </div>
+
+    <div>
+      <label for="contact-subject" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        Subject
+      </label>
+      <input
+        id="contact-subject"
+        type="text"
+        name="subject"
+        required
+        class="contact-field"
+        placeholder="Project inquiry"
+      />
+    </div>
+
+    <div>
+      <label for="contact-message" class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300">
+        Your message
+      </label>
+      <textarea
+        id="contact-message"
+        name="message"
+        required
+        rows="5"
+        class="contact-field resize-y min-h-[8rem]"
+        placeholder="Tell me about your idea..."
+      ></textarea>
+    </div>
+
+    <button type="submit" class="contact-submit">
+      Send Message
+    </button>
+  </form>
+</div>
+
+<script>
+  const showContactSuccess = () => {
+    const params = new URLSearchParams(window.location.search)
+    const successBanner = document.getElementById("contact-success")
+
+    if (params.get("sent") === "1" && successBanner) {
+      successBanner.classList.remove("hidden")
+      window.history.replaceState({}, "", `${window.location.pathname}#contacto`)
+    }
+  }
+
+  showContactSuccess()
+  document.addEventListener("astro:page-load", showContactSuccess)
+</script>
+
+<style>
+  .contact-field {
+    @apply w-full rounded-xl border border-gray-300 bg-white/80 px-4 py-3 text-gray-900 shadow-sm outline-none transition
+      placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20
+      dark:border-gray-600 dark:bg-gray-900/60 dark:text-gray-100 dark:placeholder:text-gray-500
+      dark:focus:border-blue-400 dark:focus:ring-blue-400/20;
+  }
+
+  .contact-submit {
+    @apply inline-flex w-full items-center justify-center rounded-xl border border-gray-300 bg-gray-100 px-4 py-3
+      text-base font-medium text-gray-800 transition hover:bg-gray-800 hover:text-white
+      focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
+      dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700
+      dark:focus-visible:ring-offset-gray-950;
+  }
+</style>

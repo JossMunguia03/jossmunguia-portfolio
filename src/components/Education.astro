@@ -1,0 +1,22 @@
+---
+import ExperienceItem from "./ExperienceItem.astro"
+
+const EDUCATION = [
+  {
+    title: "Bachelor's degree in Software Engineering",
+    titleColor: "#E98300",
+    company: "Instituto Tecnológico de Sonora Guaymas Campus",
+    date: "2021 - 2025",
+  },
+]
+---
+
+<ol class="relative mt-16">
+  {
+    EDUCATION.map((item) => (
+      <li>
+        <ExperienceItem {...item} />
+      </li>
+    ))
+  }
+</ol>
