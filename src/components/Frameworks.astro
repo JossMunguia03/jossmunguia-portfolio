@@ -32,14 +32,15 @@ const FRAMEWORKS = [
 <style>
   .frameworks-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 180px));
+    justify-content: center;
     gap: 1.25rem;
     margin-top: 1rem;
   }
 
   @media (min-width: 640px) {
     .frameworks-grid {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 180px));
     }
   }
 
